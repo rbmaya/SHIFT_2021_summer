@@ -1,3 +1,8 @@
 <resources>
-	<string name="app_name">Shift2021Summer</string>
+    <string name="app_name">MakeUp</string>
+    <string name="brand">Brand:</string>
+    <string name="price_label">Price:</string>
+    <string name="star_rating">Star rating:</string>
+    <string name="buy_now">Buy now</string>
+    <string name="price">$%1$s</string>
 </resources>

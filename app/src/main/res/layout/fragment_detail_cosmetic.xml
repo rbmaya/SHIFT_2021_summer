@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".detail.DetailCosmeticFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sample_background"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            style="@style/LabelsStyle.Bold"
+            android:id="@+id/cosmetic_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title"/>
+
+        <ImageView
+            android:id="@+id/cosmetic_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cosmetic_name"
+            android:layout_marginTop="16dp"
+            tools:background="@color/purple_200"
+            android:src="@drawable/sample_picture"
+            />
+
+
+        <TextView
+            android:id="@+id/brand_label"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cosmetic_image"
+            android:layout_marginTop="16dp"
+            android:text="@string/brand"
+            style="@style/LabelsStyle" />
+
+        <TextView
+            style="@style/LabelsStyle"
+            android:id="@+id/cosmetic_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toEndOf="@+id/brand_label"
+            app:layout_constraintTop_toBottomOf="@id/cosmetic_image"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            tools:text="Cosmetic brand" />
+
+        <TextView
+            style="@style/LabelsStyle"
+            android:id="@+id/price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/brand_label"
+            android:text="@string/price_label"
+            android:layout_marginTop="16dp"
+            />
+
+        <TextView
+            android:id="@+id/cosmetic_price"
+            style="@style/LabelsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@id/price_label"
+            app:layout_constraintTop_toBottomOf="@id/cosmetic_brand"
+            tools:text="Cosmetic price" />
+
+        <TextView
+            android:id="@+id/star_rating_label"
+            style="@style/LabelsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/star_rating"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/price_label"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            style="@style/LabelsStyle"
+            android:id="@+id/cosmetic_star_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/star_rating_label"
+            app:layout_constraintTop_toBottomOf="@id/cosmetic_price"
+            tools:text="Cosmetic star rating"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            />
+
+        <Button
+            android:id="@+id/button_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_now"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/star_rating_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

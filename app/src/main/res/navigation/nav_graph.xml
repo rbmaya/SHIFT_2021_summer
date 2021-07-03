@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cosmeticsListFragment">
+
+    <fragment
+        android:id="@+id/cosmeticsListFragment"
+        android:name="ru.cft.shift2021summer.list.CosmeticsListFragment"
+        android:label="CosmeticsListFragment" >
+        <action
+            android:id="@+id/action_cosmeticsListFragment_to_detailCosmeticFragment2"
+            app:destination="@id/detailCosmeticFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailCosmeticFragment"
+        android:name="ru.cft.shift2021summer.detail.DetailCosmeticFragment"
+        android:label="fragment_detail_cosmetic"
+        tools:layout="@layout/fragment_detail_cosmetic" >
+        <action
+            android:id="@+id/action_detailCosmeticFragment_to_cosmeticsListFragment"
+            app:popUpTo="@id/cosmeticsListFragment" />
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+</navigation>
