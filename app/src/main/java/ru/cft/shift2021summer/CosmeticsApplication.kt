@@ -1,12 +1,7 @@
 package ru.cft.shift2021summer
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class CosmeticsApplication: Application(){
-    lateinit var cosmeticsRepository: CosmeticsRepository
-
-    override fun onCreate() {
-        super.onCreate()
-        cosmeticsRepository = CosmeticsRepository()
-    }
-}
+@HiltAndroidApp
+class CosmeticsApplication: Application()

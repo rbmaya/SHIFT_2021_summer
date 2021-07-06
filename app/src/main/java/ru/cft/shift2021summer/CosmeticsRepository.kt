@@ -1,6 +1,9 @@
 package ru.cft.shift2021summer
 
-class CosmeticsRepository {
+import javax.inject.Inject
+
+
+class CosmeticsRepository @Inject constructor(){
     private val cosmetics = mutableListOf(
         Cosmetic(
             id = 1,

@@ -6,33 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import ru.cft.shift2021summer.CosmeticsApplication
-import ru.cft.shift2021summer.CosmeticsRepository
+import dagger.hilt.android.AndroidEntryPoint
 import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.FragmentDetailCosmeticBinding
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailCosmeticFragment : Fragment() {
     private lateinit var binding: FragmentDetailCosmeticBinding
 
-    private val detailCosmeticViewModel: DetailCosmeticViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                modelClass
-                    .getConstructor(
-                        CosmeticsRepository::class.java,
-                    ).newInstance(
-                        (activity?.application as CosmeticsApplication).cosmeticsRepository
-                    )
-        }
-    }
+    @Inject
+    lateinit var factory: DetailCosmeticViewModel.DetailCosmeticViewModelFactory
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val detailCosmeticViewModel: DetailCosmeticViewModel by viewModels {
         val args: DetailCosmeticFragmentArgs by navArgs()
-        detailCosmeticViewModel.loadCosmetic(args.id)
+        DetailCosmeticViewModel.provideFactory(factory, args.id)
     }
 
     override fun onCreateView(
@@ -57,7 +46,7 @@ class DetailCosmeticFragment : Fragment() {
     private fun bindCosmetic() {
         detailCosmeticViewModel.cosmetic.value?.let {
             with(binding){
-                cosmeticName.text = it.name
+                collapsingToolbar.title = it.name
                 cosmeticBrand.text = it.brand
                 cosmeticPrice.text = context?.getString(R.string.price, it.price) ?: "Unknown"
                 cosmeticStarRating.text = it.starRating

@@ -6,15 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import ru.cft.shift2021summer.CosmeticsApplication
-import ru.cft.shift2021summer.CosmeticsRepository
+import dagger.hilt.android.AndroidEntryPoint
 import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.FragmentCosmeticListBinding
 
+@AndroidEntryPoint
 class CosmeticsListFragment : Fragment() {
     private lateinit var binding: FragmentCosmeticListBinding
     private lateinit var cosmeticsRecyclerView: RecyclerView
@@ -23,17 +21,7 @@ class CosmeticsListFragment : Fragment() {
         navigateToDetailCosmetic(id = it.id)
     }
 
-    private val cosmeticsListViewModel: CosmeticsListViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                modelClass
-                    .getConstructor(
-                        CosmeticsRepository::class.java,
-                    ).newInstance(
-                        (activity?.application as CosmeticsApplication).cosmeticsRepository
-                    )
-        }
-    }
+    private val cosmeticsListViewModel: CosmeticsListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
