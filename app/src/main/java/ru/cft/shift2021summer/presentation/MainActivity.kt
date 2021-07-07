@@ -1,8 +1,9 @@
-package ru.cft.shift2021summer
+package ru.cft.shift2021summer.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.ActivityMainBinding
 
 @AndroidEntryPoint

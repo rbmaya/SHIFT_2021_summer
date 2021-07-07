@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cosmeticsListFragment"
-        android:name="ru.cft.shift2021summer.list.CosmeticsListFragment"
+        android:name="ru.cft.shift2021summer.presentation.list.CosmeticsListFragment"
         android:label="CosmeticsListFragment" >
         <action
             android:id="@+id/action_cosmeticsListFragment_to_detailCosmeticFragment2"
@@ -16,14 +16,14 @@
 
     <fragment
         android:id="@+id/detailCosmeticFragment"
-        android:name="ru.cft.shift2021summer.detail.DetailCosmeticFragment"
+        android:name="ru.cft.shift2021summer.presentation.detail.DetailCosmeticFragment"
         android:label="fragment_detail_cosmetic"
         tools:layout="@layout/fragment_detail_cosmetic" >
         <action
             android:id="@+id/action_detailCosmeticFragment_to_cosmeticsListFragment"
             app:popUpTo="@id/cosmeticsListFragment" />
         <argument
-            android:name="id"
-            app:argType="long" />
+            android:name="cosmetic"
+            app:argType="ru.cft.shift2021summer.domain.Cosmetic" />
     </fragment>
 </navigation>

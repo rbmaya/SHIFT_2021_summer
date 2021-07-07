@@ -6,4 +6,5 @@
     <string name="buy_now">Buy now</string>
     <string name="price">$%1$s</string>
     <string name="back">Back</string>
+    <string name="description">Description:</string>
 </resources>

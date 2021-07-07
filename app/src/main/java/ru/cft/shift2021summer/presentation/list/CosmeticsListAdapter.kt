@@ -1,9 +1,10 @@
-package ru.cft.shift2021summer.list
+package ru.cft.shift2021summer.presentation.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.cft.shift2021summer.Cosmetic
+import com.squareup.picasso.Picasso
+import ru.cft.shift2021summer.domain.Cosmetic
 import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.ItemCosmeticsListBinding
 
@@ -35,6 +36,8 @@ class CosmeticsListAdapter(private val onItemClick: (Cosmetic) -> Unit) :
 
         fun bind(cosmetic: Cosmetic) {
             with(itemBinding) {
+                Picasso.with(itemView.context).load(cosmetic.imageLink).fit().centerCrop()
+                    .into(cosmeticImage)
                 nameLabel.text = cosmetic.name
                 cosmeticPrice.text = itemView.context.getString(R.string.price, cosmetic.price)
             }
