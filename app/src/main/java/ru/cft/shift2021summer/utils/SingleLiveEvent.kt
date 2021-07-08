@@ -1,4 +1,4 @@
-package ru.cft.shift2021summer.presentation
+package ru.cft.shift2021summer.utils
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

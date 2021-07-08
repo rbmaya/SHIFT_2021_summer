@@ -49,25 +49,32 @@ class CosmeticsListFragment : Fragment() {
         lifecycleScope.launch {
             cosmeticsListViewModel.uiState.flowWithLifecycle(lifecycle)
                 .collect {
-                    when (it){
-                        is CosmeticsListViewModel.CosmeticsListUiState.Loading -> {
-                            setIsLoading(true)
-                        }
-                        is CosmeticsListViewModel.CosmeticsListUiState.Success -> {
-                            setIsLoading(false)
-                            adapter.cosmetics = it.cosmetics
-                        }
-                        is CosmeticsListViewModel.CosmeticsListUiState.Error -> {
-                            showError("Can't load cosmetics list!")
-                            it.exc.printStackTrace()
-                        }
-                    }
+                    processListLoading(it)
                 }
         }
 
         cosmeticsListViewModel.openDetailCosmeticEvent.observe(viewLifecycleOwner, {
             navigateToDetailCosmetic(it)
         })
+    }
+
+    private fun processListLoading(uiState: CosmeticsListViewModel.CosmeticsListUiState){
+        when (uiState){
+            is CosmeticsListViewModel.CosmeticsListUiState.Loading -> {
+                setIsLoading(true)
+            }
+            is CosmeticsListViewModel.CosmeticsListUiState.Success -> {
+                setIsLoading(false)
+                adapter.cosmetics = uiState.cosmetics
+            }
+            is CosmeticsListViewModel.CosmeticsListUiState.Error -> {
+                showError("Can't load cosmetics list!")
+                uiState.exc.printStackTrace()
+            }
+            else -> {
+                showError("Can't load cosmetics list!")
+            }
+        }
     }
 
     private fun setIsLoading(loading: Boolean){

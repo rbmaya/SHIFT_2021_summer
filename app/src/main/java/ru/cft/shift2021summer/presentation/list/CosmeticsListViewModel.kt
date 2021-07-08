@@ -6,10 +6,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import ru.cft.shift2021summer.domain.Cosmetic
 import ru.cft.shift2021summer.domain.GetCosmeticsUseCase
-import ru.cft.shift2021summer.presentation.SingleLiveEvent
+import ru.cft.shift2021summer.utils.SingleLiveEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,8 +30,13 @@ class CosmeticsListViewModel @Inject constructor(
 
     fun loadCosmetics() {
         viewModelScope.launch {
-            getCosmeticsUseCase().collect {
-                _uiState.value = it
+            _uiState.value = CosmeticsListUiState.Loading
+            try {
+                val list = getCosmeticsUseCase()
+                _uiState.value = CosmeticsListUiState.Success(list)
+            } catch (exc: Exception){
+                exc.printStackTrace()
+                _uiState.value = CosmeticsListUiState.Error(exc)
             }
         }
     }

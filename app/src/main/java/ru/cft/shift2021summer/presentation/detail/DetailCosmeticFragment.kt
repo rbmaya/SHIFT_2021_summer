@@ -59,7 +59,7 @@ class DetailCosmeticFragment : Fragment() {
             Picasso.with(context).load(cosmetic.imageLink).fit().centerCrop()
                 .into(cosmeticImage)
             cosmeticBrand.text = cosmetic.brand
-            cosmeticPrice.text = context?.getString(R.string.price, cosmetic.price) ?: "Unknown"
+            cosmeticPrice.text = requireContext().getString(R.string.price, cosmetic.price)
             cosmeticStarRating.text = cosmetic.starRating
             cosmeticDescription.text = cosmetic.description
             buttonBuy.setOnClickListener {
