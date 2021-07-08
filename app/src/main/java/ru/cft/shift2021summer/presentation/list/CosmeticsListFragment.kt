@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -45,7 +44,10 @@ class CosmeticsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cosmeticsListViewModel.loadCosmetics()
+        cosmeticsListViewModel.loadCosmetics(false)
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            cosmeticsListViewModel.loadCosmetics(true)
+        }
         lifecycleScope.launch {
             cosmeticsListViewModel.uiState.flowWithLifecycle(lifecycle)
                 .collect {
@@ -68,19 +70,19 @@ class CosmeticsListFragment : Fragment() {
                 adapter.cosmetics = uiState.cosmetics
             }
             is CosmeticsListViewModel.CosmeticsListUiState.Error -> {
+                setIsLoading(false)
                 showError("Can't load cosmetics list!")
                 uiState.exc.printStackTrace()
             }
             else -> {
-                showError("Can't load cosmetics list!")
+                setIsLoading(false)
             }
         }
     }
 
     private fun setIsLoading(loading: Boolean){
         with(binding){
-            cosmeticsRecyclerView.isVisible = !loading
-            progressBar.isVisible = loading
+            swipeRefreshLayout.isRefreshing = loading
         }
     }
 

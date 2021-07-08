@@ -4,15 +4,15 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.cft.shift2021summer.data.CosmeticsDataSource
-import ru.cft.shift2021summer.data.CosmeticsRemoteDataSourceImpl
-import ru.cft.shift2021summer.data.CosmeticsRepositoryImpl
-import ru.cft.shift2021summer.domain.CosmeticsRepository
+import ru.cft.shift2021summer.data.network.CosmeticsDataSource
+import ru.cft.shift2021summer.data.network.CosmeticsRemoteDataSourceImpl
+import ru.cft.shift2021summer.data.network.CosmeticsRepositoryImpl
+import ru.cft.shift2021summer.domain.network.CosmeticsRepository
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface RepositoryBindModule {
+interface CosmeticsRepositoryBindModule {
 
     @Binds
     @Singleton

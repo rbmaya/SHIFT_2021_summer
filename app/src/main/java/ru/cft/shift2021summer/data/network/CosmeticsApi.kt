@@ -1,4 +1,4 @@
-package ru.cft.shift2021summer.data
+package ru.cft.shift2021summer.data.network
 
 import retrofit2.http.GET
 import retrofit2.http.Path

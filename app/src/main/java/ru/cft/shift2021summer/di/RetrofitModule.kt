@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.cft.shift2021summer.data.CosmeticsApi
+import ru.cft.shift2021summer.data.network.CosmeticsApi
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 

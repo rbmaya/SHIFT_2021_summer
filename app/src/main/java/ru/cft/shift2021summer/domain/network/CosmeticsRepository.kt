@@ -1,7 +1,8 @@
-package ru.cft.shift2021summer.data
+package ru.cft.shift2021summer.domain.network
 
 import ru.cft.shift2021summer.domain.Cosmetic
 
-interface CosmeticsDataSource {
+
+interface CosmeticsRepository{
     suspend fun getCosmetics(): List<Cosmetic>
 }

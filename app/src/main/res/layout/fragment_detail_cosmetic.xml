@@ -22,6 +22,7 @@
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:collapsedTitleTextAppearance="@style/LabelsStyle.Bold"
             app:expandedTitleTextAppearance="@style/LabelsStyle.Bold"
+            app:expandedTitleMarginTop="16dp"
             tools:title="Title"
             >
 
