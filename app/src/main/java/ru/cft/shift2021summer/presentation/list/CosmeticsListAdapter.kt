@@ -2,7 +2,9 @@ package ru.cft.shift2021summer.presentation.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import ru.cft.shift2021summer.domain.Cosmetic
 import ru.cft.shift2021summer.R
@@ -36,8 +38,14 @@ class CosmeticsListAdapter(private val onItemClick: (Cosmetic) -> Unit) :
 
         fun bind(cosmetic: Cosmetic) {
             with(itemBinding) {
+                progressBar.isVisible = true
                 Picasso.with(itemView.context).load(cosmetic.imageLink).fit().centerCrop()
-                    .into(cosmeticImage)
+                    .into(cosmeticImage, object : Callback{
+                        override fun onSuccess() {
+                            progressBar.isVisible = false 
+                        }
+                        override fun onError() {}
+                    })
                 nameLabel.text = cosmetic.name
                 cosmeticPrice.text = itemView.context.getString(R.string.price, cosmetic.price)
             }

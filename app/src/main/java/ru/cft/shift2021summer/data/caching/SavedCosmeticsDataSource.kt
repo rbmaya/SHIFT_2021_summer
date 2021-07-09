@@ -6,4 +6,6 @@ interface SavedCosmeticsDataSource {
     suspend fun saveCosmetics(cosmetics: List<Cosmetic>)
 
     suspend fun getCosmetics(): List<Cosmetic>
+
+    suspend fun getCosmeticByName(name: String): List<Cosmetic>
 }

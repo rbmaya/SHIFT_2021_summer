@@ -15,4 +15,7 @@ class SavedCosmeticsRepositoryImpl @Inject constructor(
 
     override suspend fun getCosmetics(): List<Cosmetic> =
         savedCosmeticsDataSource.getCosmetics()
+
+    override suspend fun getCosmeticByName(name: String): List<Cosmetic> =
+        savedCosmeticsDataSource.getCosmeticByName(name)
 }

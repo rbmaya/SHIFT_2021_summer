@@ -12,4 +12,7 @@ class SavedCosmeticsLocalDataSourceImpl @Inject constructor(
         savedCosmeticsDao.saveCosmetics(cosmetics)
 
     override suspend fun getCosmetics(): List<Cosmetic> = savedCosmeticsDao.getCosmetics()
+
+    override suspend fun getCosmeticByName(name: String): List<Cosmetic> =
+        savedCosmeticsDao.getCosmeticByName(name)
 }

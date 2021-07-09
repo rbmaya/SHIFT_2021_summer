@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.cft.shift2021summer.domain.Cosmetic
+import ru.cft.shift2021summer.domain.caching.GetCosmeticByNameUseCase
 import ru.cft.shift2021summer.domain.caching.GetSavedCosmeticsUseCase
 import ru.cft.shift2021summer.domain.caching.SaveCosmeticsUseCase
 import ru.cft.shift2021summer.domain.network.GetCosmeticsUseCase
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class CosmeticsListViewModel @Inject constructor(
     private val getCosmeticsUseCase: GetCosmeticsUseCase,
     private val getSavedCosmeticsUseCase: GetSavedCosmeticsUseCase,
-    private val saveCosmeticsUseCase: SaveCosmeticsUseCase
+    private val saveCosmeticsUseCase: SaveCosmeticsUseCase,
+    private val getCosmeticByNameUseCase: GetCosmeticByNameUseCase
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CosmeticsListUiState> =
@@ -45,7 +47,25 @@ class CosmeticsListViewModel @Inject constructor(
                 }
                 _uiState.value = CosmeticsListUiState.Success(list)
             } catch (exc: Exception) {
-                _uiState.value = CosmeticsListUiState.Error(exc)
+                _uiState.value = CosmeticsListUiState.Error(exc,
+                "Can't load cosmetics list")
+            }
+        }
+    }
+
+    fun queryTextChanged(newText: String?){
+        if (newText == null) {
+            loadCosmetics(false)
+        } else {
+            viewModelScope.launch {
+                _uiState.value = CosmeticsListUiState.Loading
+                try {
+                    val list = getCosmeticByNameUseCase(newText)
+                    _uiState.value = CosmeticsListUiState.Success(list)
+                } catch (exc: java.lang.Exception){
+                    _uiState.value = CosmeticsListUiState.Error(exc,
+                    "No results")
+                }
             }
         }
     }
@@ -54,6 +74,6 @@ class CosmeticsListViewModel @Inject constructor(
         object NoValue : CosmeticsListUiState()
         object Loading : CosmeticsListUiState()
         data class Success(val cosmetics: List<Cosmetic>) : CosmeticsListUiState()
-        data class Error(val exc: Exception) : CosmeticsListUiState()
+        data class Error(val exc: Exception, val message: String) : CosmeticsListUiState()
     }
 }

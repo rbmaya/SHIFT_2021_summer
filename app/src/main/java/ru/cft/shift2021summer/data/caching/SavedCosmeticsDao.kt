@@ -13,4 +13,7 @@ interface SavedCosmeticsDao {
 
     @Query("SELECT * FROM cosmetic")
     suspend fun getCosmetics(): List<Cosmetic>
+
+    @Query("SELECT * FROM cosmetic WHERE name=(:name)")
+    suspend fun getCosmeticByName(name: String): List<Cosmetic>
 }

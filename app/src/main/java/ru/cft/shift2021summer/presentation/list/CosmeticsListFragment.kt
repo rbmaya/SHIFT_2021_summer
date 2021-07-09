@@ -1,10 +1,9 @@
 package ru.cft.shift2021summer.presentation.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.util.Log
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -19,6 +18,7 @@ import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.FragmentCosmeticListBinding
 import ru.cft.shift2021summer.domain.Cosmetic
 
+
 @AndroidEntryPoint
 class CosmeticsListFragment : Fragment() {
     private lateinit var binding: FragmentCosmeticListBinding
@@ -29,6 +29,11 @@ class CosmeticsListFragment : Fragment() {
     }
 
     private val cosmeticsListViewModel: CosmeticsListViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,9 +59,28 @@ class CosmeticsListFragment : Fragment() {
                     processListLoading(it)
                 }
         }
-
         cosmeticsListViewModel.openDetailCosmeticEvent.observe(viewLifecycleOwner, {
             navigateToDetailCosmetic(it)
+        })
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.list_menu, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+                cosmeticsListViewModel.queryTextChanged(newText)
+                Log.d("#@@!", "onQueryTextChange")
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("#@@!", "onQueryTextSubmit")
+                return true
+            }
         })
     }
 
@@ -71,7 +95,7 @@ class CosmeticsListFragment : Fragment() {
             }
             is CosmeticsListViewModel.CosmeticsListUiState.Error -> {
                 setIsLoading(false)
-                showError("Can't load cosmetics list!")
+                showError(uiState.message)
                 uiState.exc.printStackTrace()
             }
             else -> {

@@ -22,7 +22,6 @@
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:collapsedTitleTextAppearance="@style/LabelsStyle.Bold"
             app:expandedTitleTextAppearance="@style/LabelsStyle.Bold"
-            app:expandedTitleMarginTop="16dp"
             tools:title="Title"
             >
 
@@ -30,7 +29,7 @@
                 android:id="@+id/cosmetic_image"
                 android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="64dp"
                 android:layout_marginTop="32dp"
                 android:layout_gravity="center"
                 app:layout_collapseMode="parallax"
