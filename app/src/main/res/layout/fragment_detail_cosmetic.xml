@@ -37,10 +37,13 @@
                 />
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tool_bar"
+                android:id="@+id/toolbar_detail"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin"
+                app:menu="@menu/details_menu"
+                app:navigationIcon="@drawable/ic_back"
+                android:paddingEnd="16dp">
 
 
             </com.google.android.material.appbar.MaterialToolbar>

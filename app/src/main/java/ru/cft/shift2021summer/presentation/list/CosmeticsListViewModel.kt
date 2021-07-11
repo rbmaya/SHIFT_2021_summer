@@ -1,6 +1,5 @@
 package ru.cft.shift2021summer.presentation.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +11,7 @@ import ru.cft.shift2021summer.domain.caching.GetCosmeticByNameUseCase
 import ru.cft.shift2021summer.domain.caching.GetSavedCosmeticsUseCase
 import ru.cft.shift2021summer.domain.caching.SaveCosmeticsUseCase
 import ru.cft.shift2021summer.domain.network.GetCosmeticsUseCase
+import ru.cft.shift2021summer.utils.CosmeticsUiState
 import ru.cft.shift2021summer.utils.SingleLiveEvent
 import javax.inject.Inject
 
@@ -23,19 +23,19 @@ class CosmeticsListViewModel @Inject constructor(
     private val getCosmeticByNameUseCase: GetCosmeticByNameUseCase
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<CosmeticsListUiState> =
-        MutableStateFlow(CosmeticsListUiState.NoValue)
+    private val _uiState: MutableStateFlow<CosmeticsUiState> =
+        MutableStateFlow(CosmeticsUiState.NoValue)
     val uiState = _uiState.asStateFlow()
 
-    val openDetailCosmeticEvent = SingleLiveEvent<Cosmetic>()
+    val openDetailsEvent = SingleLiveEvent<Cosmetic>()
 
     fun openDetailCosmetic(cosmetic: Cosmetic) {
-        openDetailCosmeticEvent.value = cosmetic
+        openDetailsEvent.value = cosmetic
     }
 
     fun loadCosmetics(isRefresh: Boolean) {
         viewModelScope.launch {
-            _uiState.value = CosmeticsListUiState.Loading
+            _uiState.value = CosmeticsUiState.Loading
             try {
                 var list: List<Cosmetic> = emptyList()
                 if (!isRefresh) {
@@ -45,35 +45,29 @@ class CosmeticsListViewModel @Inject constructor(
                     list = getCosmeticsUseCase()
                     saveCosmeticsUseCase(list)
                 }
-                _uiState.value = CosmeticsListUiState.Success(list)
+                _uiState.value = CosmeticsUiState.Success(list)
             } catch (exc: Exception) {
-                _uiState.value = CosmeticsListUiState.Error(exc,
-                "Can't load cosmetics list")
+                _uiState.value = CosmeticsUiState.Error(exc)
             }
         }
     }
 
-    fun queryTextChanged(newText: String?){
-        if (newText == null) {
+    fun queryTextChanged(newText: String?) {
+        if (newText == null || newText.isBlank()) {
             loadCosmetics(false)
         } else {
             viewModelScope.launch {
-                _uiState.value = CosmeticsListUiState.Loading
+                _uiState.value = CosmeticsUiState.Loading
                 try {
                     val list = getCosmeticByNameUseCase(newText)
-                    _uiState.value = CosmeticsListUiState.Success(list)
-                } catch (exc: java.lang.Exception){
-                    _uiState.value = CosmeticsListUiState.Error(exc,
-                    "No results")
+                    if (list.isEmpty()) {
+                        _uiState.value = CosmeticsUiState.NoResults
+                    }
+                    _uiState.value = CosmeticsUiState.Success(list)
+                } catch (exc: java.lang.Exception) {
+                    _uiState.value = CosmeticsUiState.Error(exc)
                 }
             }
         }
-    }
-
-    sealed class CosmeticsListUiState {
-        object NoValue : CosmeticsListUiState()
-        object Loading : CosmeticsListUiState()
-        data class Success(val cosmetics: List<Cosmetic>) : CosmeticsListUiState()
-        data class Error(val exc: Exception, val message: String) : CosmeticsListUiState()
     }
 }

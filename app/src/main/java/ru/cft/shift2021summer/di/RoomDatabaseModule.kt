@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.cft.shift2021summer.data.caching.CosmeticDatabase
+import ru.cft.shift2021summer.data.CosmeticDatabase
 import javax.inject.Singleton
 
 @Module

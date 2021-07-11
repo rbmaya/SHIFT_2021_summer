@@ -18,5 +18,6 @@ data class Cosmetic (
     val imageLink: String,
     @SerializedName("product_link")
     val productLink: String,
-    val description: String
+    val description: String,
+    var isFavorite: Boolean = false
 ) : Serializable

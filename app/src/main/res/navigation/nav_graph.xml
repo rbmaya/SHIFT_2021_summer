@@ -19,11 +19,16 @@
         android:name="ru.cft.shift2021summer.presentation.detail.DetailCosmeticFragment"
         android:label="fragment_detail_cosmetic"
         tools:layout="@layout/fragment_detail_cosmetic" >
-        <action
-            android:id="@+id/action_detailCosmeticFragment_to_cosmeticsListFragment"
-            app:popUpTo="@id/cosmeticsListFragment" />
         <argument
             android:name="cosmetic"
             app:argType="ru.cft.shift2021summer.domain.Cosmetic" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteCosmeticsFragment"
+        android:name="ru.cft.shift2021summer.presentation.favorites.FavoriteCosmeticsFragment"
+        android:label="FavoriteCosmeticsFragment" >
+        <action
+            android:id="@+id/action_favoriteCosmeticsFragment_to_detailCosmeticFragment"
+            app:destination="@id/detailCosmeticFragment" />
     </fragment>
 </navigation>
