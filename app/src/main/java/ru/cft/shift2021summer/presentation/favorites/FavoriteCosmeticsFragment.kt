@@ -2,14 +2,15 @@ package ru.cft.shift2021summer.presentation.favorites
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ExpandableListView
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.slider.RangeSlider
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -17,8 +18,8 @@ import kotlinx.coroutines.launch
 import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.FragmentFavoriteCosmeticsBinding
 import ru.cft.shift2021summer.domain.Cosmetic
+import ru.cft.shift2021summer.presentation.MainActivity
 import ru.cft.shift2021summer.presentation.list.CosmeticsListAdapter
-import ru.cft.shift2021summer.presentation.list.CosmeticsListFragmentDirections
 import ru.cft.shift2021summer.utils.CosmeticsUiState
 
 @AndroidEntryPoint
@@ -45,13 +46,22 @@ class FavoriteCosmeticsFragment : Fragment() {
         binding = FragmentFavoriteCosmeticsBinding.bind(view)
         favoritesRecyclerView = binding.cosmeticsList
         favoritesRecyclerView.adapter = adapter
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarListFavorites)
+        with(activity as MainActivity) {
+            setToolbar()
+            setSearchOptionsListeners(createOptionsSearchListener())
+            setListenerOnRemoveSearchOptions {
+                favoritesCosmeticViewModel.loadCosmetics()
+                closeDrawers()
+            }
+            setListenerOnPriceSlider(createPriceSliderListener())
+        }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         favoritesCosmeticViewModel.loadCosmetics()
+        favoritesCosmeticViewModel.loadPriceLimits()
         lifecycleScope.launch {
             favoritesCosmeticViewModel.uiState.flowWithLifecycle(lifecycle)
                 .collect {
@@ -60,6 +70,9 @@ class FavoriteCosmeticsFragment : Fragment() {
         }
         favoritesCosmeticViewModel.openDetailCosmeticEvent.observe(viewLifecycleOwner, {
             navigateToDetailCosmetic(it)
+        })
+        favoritesCosmeticViewModel.limitPriceEvent.observe(viewLifecycleOwner, {
+            processPriceLimits(it)
         })
     }
 
@@ -79,6 +92,46 @@ class FavoriteCosmeticsFragment : Fragment() {
         })
     }
 
+    private fun processPriceLimits(limits: FavoritesCosmeticViewModel.LimitPriceEvent) {
+        when (limits) {
+            is FavoritesCosmeticViewModel.LimitPriceEvent.PriceLimits -> {
+                with(activity as MainActivity) {
+                    setValuesOnPriceSlider(
+                        valueFrom = limits.valueFrom,
+                        valueTo = limits.valueTo
+                    )
+                }
+            }
+        }
+    }
+
+    private fun createPriceSliderListener(): RangeSlider.OnSliderTouchListener{
+        return object : RangeSlider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: RangeSlider) {}
+
+            override fun onStopTrackingTouch(slider: RangeSlider) {
+                val values = slider.values
+                val valueFrom = values[0]
+                val valueTo = values[1]
+                favoritesCosmeticViewModel.loadCosmeticsByPrice(valueFrom = valueFrom, valueTo = valueTo)
+            }
+        }
+    }
+
+    private fun createOptionsSearchListener(): ExpandableListView.OnChildClickListener {
+        return ExpandableListView.OnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            val group = (activity as MainActivity).getSelectedSearchGroupName(groupPosition)
+            val name =
+                (activity as MainActivity).getSelectedSearchOptions(groupPosition, childPosition)
+            when (group.lowercase()) {
+                "brand" -> favoritesCosmeticViewModel.loadCosmeticsByBrand(name)
+                "product type" -> favoritesCosmeticViewModel.loadCosmeticsByProductType(name)
+            }
+            (activity as MainActivity).closeDrawers()
+            true
+        }
+    }
+
     private fun processListLoading(uiState: CosmeticsUiState) {
         when (uiState) {
             is CosmeticsUiState.Success -> {
@@ -91,7 +144,8 @@ class FavoriteCosmeticsFragment : Fragment() {
             is CosmeticsUiState.NoResults -> {
                 showMessage("No results!")
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 

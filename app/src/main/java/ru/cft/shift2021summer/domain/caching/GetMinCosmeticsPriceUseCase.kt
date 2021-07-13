@@ -4,8 +4,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetFavoriteCosmeticsUseCase @Inject constructor(
+class GetMinCosmeticsPriceUseCase @Inject constructor(
     private val savedCosmeticsRepository: SavedCosmeticsRepository
-){
-    suspend operator fun invoke() = savedCosmeticsRepository.getFavoriteCosmetics()
+) {
+    suspend operator fun invoke() = savedCosmeticsRepository.getMinCosmeticsPrice()
 }

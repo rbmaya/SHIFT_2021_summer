@@ -9,5 +9,4 @@ data class CosmeticIsFavorite(
     val id: Long,
     @ColumnInfo(name = "isFavorite")
     val isFavorite: Boolean
-
 )

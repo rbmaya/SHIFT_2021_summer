@@ -4,9 +4,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetCosmeticByNameUseCase @Inject constructor(
+class GetCosmeticByBrandUseCase @Inject constructor(
     private val savedCosmeticsRepository: SavedCosmeticsRepository
-) {
-    suspend operator fun invoke(name: String) =
-        savedCosmeticsRepository.getCosmeticByName(name)
+){
+    suspend operator fun invoke(name: String) = savedCosmeticsRepository.getCosmeticByBrand(name)
 }

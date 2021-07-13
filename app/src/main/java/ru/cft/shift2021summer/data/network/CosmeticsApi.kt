@@ -9,19 +9,4 @@ interface CosmeticsApi {
 
     @GET("products.json")
     suspend fun getCosmetics(): List<Cosmetic>
-
-    @GET("products.json")
-    suspend fun getCosmeticsByType(
-        @Query("product_type") productType: String
-    ): List<Cosmetic>
-
-    @GET("products.json")
-    suspend fun getCosmeticsByBrand(
-        @Query("brand") brand: String
-    ): List<Cosmetic>
-
-    @GET("products.json")
-    suspend fun getCosmeticsByTags(
-        @Query("product_tags") tags: String
-    )
 }

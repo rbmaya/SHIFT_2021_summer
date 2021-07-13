@@ -2,7 +2,7 @@ package ru.cft.shift2021summer.presentation.list
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ExpandableListView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,6 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.slider.RangeSlider
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -17,6 +18,8 @@ import kotlinx.coroutines.launch
 import ru.cft.shift2021summer.R
 import ru.cft.shift2021summer.databinding.FragmentCosmeticListBinding
 import ru.cft.shift2021summer.domain.Cosmetic
+import ru.cft.shift2021summer.presentation.MainActivity
+import ru.cft.shift2021summer.presentation.favorites.FavoritesCosmeticViewModel
 import ru.cft.shift2021summer.utils.CosmeticsUiState
 
 
@@ -46,13 +49,22 @@ class CosmeticsListFragment : Fragment() {
         binding = FragmentCosmeticListBinding.bind(view)
         cosmeticsRecyclerView = binding.cosmeticsList
         cosmeticsRecyclerView.adapter = adapter
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarListCosmetics)
+        with(activity as MainActivity) {
+            setToolbar()
+            setSearchOptionsListeners(createOptionsSearchListener())
+            setListenerOnRemoveSearchOptions {
+                cosmeticsListViewModel.loadCosmetics(false)
+                closeDrawers()
+            }
+            setListenerOnPriceSlider(createPriceSliderListener())
+        }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         cosmeticsListViewModel.loadCosmetics(false)
+        cosmeticsListViewModel.loadPriceLimits()
         binding.swipeRefreshLayout.setOnRefreshListener {
             clearSearchView()
             cosmeticsListViewModel.loadCosmetics(true)
@@ -65,6 +77,9 @@ class CosmeticsListFragment : Fragment() {
         }
         cosmeticsListViewModel.openDetailsEvent.observe(viewLifecycleOwner, {
             navigateToDetailCosmetic(it)
+        })
+        cosmeticsListViewModel.limitPriceEvent.observe(viewLifecycleOwner, {
+            processPriceLimits(it)
         })
     }
 
@@ -82,6 +97,46 @@ class CosmeticsListFragment : Fragment() {
                 return false
             }
         })
+    }
+
+    private fun processPriceLimits(limits: FavoritesCosmeticViewModel.LimitPriceEvent) {
+        when (limits) {
+            is FavoritesCosmeticViewModel.LimitPriceEvent.PriceLimits -> {
+                with(activity as MainActivity) {
+                    setValuesOnPriceSlider(
+                        valueFrom = limits.valueFrom,
+                        valueTo = limits.valueTo
+                    )
+                }
+            }
+        }
+    }
+
+    private fun createPriceSliderListener(): RangeSlider.OnSliderTouchListener{
+        return object : RangeSlider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: RangeSlider) {}
+
+            override fun onStopTrackingTouch(slider: RangeSlider) {
+                val values = slider.values
+                val valueFrom = values[0]
+                val valueTo = values[1]
+                cosmeticsListViewModel.loadCosmeticsByPrice(valueFrom = valueFrom, valueTo = valueTo)
+            }
+        }
+    }
+
+    private fun createOptionsSearchListener(): ExpandableListView.OnChildClickListener {
+        return ExpandableListView.OnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            val group = (activity as MainActivity).getSelectedSearchGroupName(groupPosition)
+            val name =
+                (activity as MainActivity).getSelectedSearchOptions(groupPosition, childPosition)
+            when (group.lowercase()) {
+                "brand" -> cosmeticsListViewModel.loadCosmeticsByBrand(name)
+                "product type" -> cosmeticsListViewModel.loadCosmeticsByProductType(name)
+            }
+            (activity as MainActivity).closeDrawers()
+            true
+        }
     }
 
     private fun clearSearchView() {

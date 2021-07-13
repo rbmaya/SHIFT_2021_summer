@@ -47,7 +47,7 @@ class CosmeticsListAdapter(private val onItemClick: (Cosmetic) -> Unit) :
                         override fun onError() {}
                     })
                 nameLabel.text = cosmetic.name
-                cosmeticPrice.text = itemView.context.getString(R.string.price, cosmetic.price)
+                cosmeticPrice.text = itemView.context.getString(R.string.price, cosmetic.price.toString())
             }
             itemView.setOnClickListener {
                 onItemClick(cosmetic)
