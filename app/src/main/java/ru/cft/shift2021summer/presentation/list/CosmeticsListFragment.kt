@@ -21,6 +21,7 @@ import ru.cft.shift2021summer.domain.Cosmetic
 import ru.cft.shift2021summer.presentation.MainActivity
 import ru.cft.shift2021summer.presentation.favorites.FavoritesCosmeticViewModel
 import ru.cft.shift2021summer.utils.CosmeticsUiState
+import ru.cft.shift2021summer.utils.LimitPriceEvent
 
 
 @AndroidEntryPoint
@@ -99,9 +100,9 @@ class CosmeticsListFragment : Fragment() {
         })
     }
 
-    private fun processPriceLimits(limits: FavoritesCosmeticViewModel.LimitPriceEvent) {
+    private fun processPriceLimits(limits: LimitPriceEvent) {
         when (limits) {
-            is FavoritesCosmeticViewModel.LimitPriceEvent.PriceLimits -> {
+            is LimitPriceEvent.PriceLimits -> {
                 with(activity as MainActivity) {
                     setValuesOnPriceSlider(
                         valueFrom = limits.valueFrom,

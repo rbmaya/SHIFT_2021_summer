@@ -11,6 +11,7 @@ import ru.cft.shift2021summer.domain.caching.*
 import ru.cft.shift2021summer.domain.network.GetCosmeticsUseCase
 import ru.cft.shift2021summer.presentation.favorites.FavoritesCosmeticViewModel
 import ru.cft.shift2021summer.utils.CosmeticsUiState
+import ru.cft.shift2021summer.utils.LimitPriceEvent
 import ru.cft.shift2021summer.utils.SingleLiveEvent
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -33,7 +34,7 @@ class CosmeticsListViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     val openDetailsEvent = SingleLiveEvent<Cosmetic>()
-    val limitPriceEvent = SingleLiveEvent<FavoritesCosmeticViewModel.LimitPriceEvent>()
+    val limitPriceEvent = SingleLiveEvent<LimitPriceEvent>()
 
     fun openDetailCosmetic(cosmetic: Cosmetic) {
         openDetailsEvent.value = cosmetic
@@ -44,7 +45,7 @@ class CosmeticsListViewModel @Inject constructor(
             try {
                 val minPrice = (getMinCosmeticsPriceUseCase() * 100f).roundToInt() / 100f
                 val maxPrice = (getMaxCosmeticsPriceUseCase() * 100f).roundToInt() / 100f
-                limitPriceEvent.value = FavoritesCosmeticViewModel.LimitPriceEvent.PriceLimits(
+                limitPriceEvent.value = LimitPriceEvent.PriceLimits(
                     valueFrom = minPrice,
                     valueTo = maxPrice
                 )
@@ -140,12 +141,5 @@ class CosmeticsListViewModel @Inject constructor(
         } else {
             loadCosmeticsByName(name)
         }
-    }
-
-    sealed class LimitPriceEvent() {
-        data class PriceLimits(
-            val valueFrom: Float,
-            val valueTo: Float
-        ) : LimitPriceEvent()
     }
 }

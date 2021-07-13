@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.cft.shift2021summer.domain.Cosmetic
 import ru.cft.shift2021summer.domain.caching.favorites.*
 import ru.cft.shift2021summer.utils.CosmeticsUiState
+import ru.cft.shift2021summer.utils.LimitPriceEvent
 import ru.cft.shift2021summer.utils.SingleLiveEvent
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -131,13 +132,6 @@ class FavoritesCosmeticViewModel @Inject constructor(
         } else {
             loadCosmeticsByName(newText)
         }
-    }
-
-    sealed class LimitPriceEvent() {
-        data class PriceLimits(
-            val valueFrom: Float,
-            val valueTo: Float
-        ) : LimitPriceEvent()
     }
 
 }
